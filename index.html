@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>구글 폼 디스코드 봇 사용 설명서</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1,
+        h2 {
+            color: #2c3e50;
+        }
+
+        .step {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .command {
+            background-color: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .language-buttons {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .language-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+        h1#title {
+            text-align: center;
+        }        
+    </style>
+</head>
+
+<body>
+    <h1 id="title">구글 폼 디스코드 봇 사용 설명서</h1>
+
+    <div class="language-buttons">
+        <button class="language-button" onclick="changeLanguage('ko')">한국어</button>
+        <button class="language-button" onclick="changeLanguage('en')">English</button>
+        <button class="language-button" onclick="changeLanguage('zh')">中文</button>
+        <button class="language-button" onclick="changeLanguage('ja')">日本語</button>
+    </div>
+
+    <div class="step" id="step1">
+        <h2 id="step1-title">1. 디스코드 봇 추가</h2>
+        <p id="step1-content">먼저 디스코드 서버에 봇을 추가해야 합니다. 봇 초대 링크를 사용하여 원하는 서버에 봇을 초대하세요.</p>
+    </div>
+
+    <div class="step" id="step2">
+        <h2 id="step2-title">2. 구글 폼 URL 및 입력창 ID 찾기</h2>
+        <p id="step2-content">구글 폼의 URL과 입력창 ID를 찾아야 합니다. 방법은 다음과 같습니다:</p>
+        <ol id="step2-list">
+            <li>구글 폼에 접속합니다.</li>
+            <li>브라우저의 개발자 도구를 엽니다 (보통 F12 키).</li>
+            <li>네트워크 탭을 선택합니다.</li>
+            <li>설문 조사를 실행합니다.</li>
+            <li>'formResponse' 항목을 찾습니다.</li>
+            <li>페이로드에서 'entry.' 뒤에 있는 숫자를 찾습니다. 이것이 입력창 ID입니다.</li>
+        </ol>
+    </div>
+
+    <div class="step" id="step3">
+        <h2 id="step3-title">3. 봇 설정하기</h2>
+        <p id="step3-content">디스코드 채팅에서 다음 명령어를 사용하여 봇을 설정합니다:</p>
+        <div class="command" id="step3-command">
+            /setting [구글폼URL] [입력창ID]
+        </div>
+        <p id="step3-example">예시:</p>
+        <div class="command" id="step3-example-command">
+            /setting https://docs.google.com/forms/d/e/your-form-id/viewform 1234567
+        </div>
+    </div>
+
+    <div class="step" id="step4">
+        <h2 id="step4-title">4. 메시지 보내기</h2>
+        <p id="step4-content">설정이 완료되면, 다음 명령어를 사용하여 구글 폼에 메시지를 보낼 수 있습니다:</p>
+        <div class="command" id="step4-command">
+            /add [메시지]
+        </div>
+        <p id="step4-example">예시:</p>
+        <div class="command" id="step4-example-command">
+            /add 안녕하세요, 이것은 테스트 메시지입니다.
+        </div>
+    </div>
+
+    <script>
+        const steps = document.querySelectorAll('.step');
+
+        function animateSteps() {
+            gsap.to(steps, {
+                opacity: 1,
+                y: 0,
+                duration: 0.5,
+                stagger: 0.2,
+                ease: "power2.out"
+            });
+        }
+
+        const translations = {
+            ko: {
+                title: "구글 폼 디스코드 봇 사용 설명서",
+                "step1-title": "1. 디스코드 봇 추가",
+                "step1-content": "먼저 디스코드 서버에 봇을 추가해야 합니다. 봇 초대 링크를 사용하여 원하는 서버에 봇을 초대하세요.",
+                "step2-title": "2. 구글 폼 URL 및 입력창 ID 찾기",
+                "step2-content": "구글 폼의 URL과 입력창 ID를 찾아야 합니다. 방법은 다음과 같습니다:",
+                "step2-list": [
+                    "구글 폼에 접속합니다.",
+                    "브라우저의 개발자 도구를 엽니다 (보통 F12 키).",
+                    "네트워크 탭을 선택합니다.",
+                    "설문 조사를 실행합니다.",
+                    "'formResponse' 항목을 찾습니다.",
+                    "페이로드에서 'entry.' 뒤에 있는 숫자를 찾습니다. 이것이 입력창 ID입니다."
+                ],
+                "step3-title": "3. 봇 설정하기",
+                "step3-content": "디스코드 채팅에서 다음 명령어를 사용하여 봇을 설정합니다:",
+                "step3-command": "/setting [구글폼URL] [입력창ID]",
+                "step3-example": "예시:",
+                "step3-example-command": "/setting https://docs.google.com/forms/d/e/your-form-id/viewform 1234567",
+                "step4-title": "4. 메시지 보내기",
+                "step4-content": "설정이 완료되면, 다음 명령어를 사용하여 구글 폼에 메시지를 보낼 수 있습니다:",
+                "step4-command": "/add [메시지]",
+                "step4-example": "예시:",
+                "step4-example-command": "/add 안녕하세요, 이것은 테스트 메시지입니다."
+            },
+            en: {
+                title: "Google Forms Discord Bot User Manual",
+                "step1-title": "1. Add Discord Bot",
+                "step1-content": "First, you need to add the bot to your Discord server. Use the bot invitation link to invite it to your desired server.",
+                "step2-title": "2. Find Google Form URL and Input Field ID",
+                "step2-content": "You need to find the URL of the Google Form and the ID of the input field. Here's how:",
+                "step2-list": [
+                    "Access the Google Form.",
+                    "Open your browser's developer tools (usually F12 key).",
+                    "Select the Network tab.",
+                    "Execute the survey.",
+                    "Find the 'formResponse' item.",
+                    "In the payload, find the number after 'entry.'. This is the input field ID."
+                ],
+                "step3-title": "3. Set Up the Bot",
+                "step3-content": "Use the following command in Discord chat to set up the bot:",
+                "step3-command": "/setting [GoogleFormURL] [InputFieldID]",
+                "step3-example": "Example:",
+                "step3-example-command": "/setting https://docs.google.com/forms/d/e/your-form-id/viewform 1234567",
+                "step4-title": "4. Send Messages",
+                "step4-content": "Once set up, you can use the following command to send messages to the Google Form:",
+                "step4-command": "/add [message]",
+                "step4-example": "Example:",
+                "step4-example-command": "/add Hello, this is a test message."
+            },
+            zh: {
+                title: "Google表单Discord机器人使用手册",
+                "step1-title": "1. 添加Discord机器人",
+                "step1-content": "首先，您需要将机器人添加到您的Discord服务器。使用机器人邀请链接将其邀请到您想要的服务器。",
+                "step2-title": "2. 查找Google表单URL和输入字段ID",
+                "step2-content": "您需要找到Google表单的URL和输入字段的ID。方法如下：",
+                "step2-list": [
+                    "访问Google表单。",
+                    "打开浏览器的开发者工具（通常是F12键）。",
+                    "选择网络标签。",
+                    "执行调查。",
+                    "找到'formResponse'项。",
+                    "在负载中，找到'entry.'后面的数字。这就是输入字段ID。"
+                ],
+                "step3-title": "3. 设置机器人",
+                "step3-content": "在Discord聊天中使用以下命令设置机器人：",
+                "step3-command": "/setting [Google表单URL] [输入字段ID]",
+                "step3-example": "示例：",
+                "step3-example-command": "/setting https://docs.google.com/forms/d/e/your-form-id/viewform 1234567",
+                "step4-title": "4. 发送消息",
+                "step4-content": "设置完成后，您可以使用以下命令向Google表单发送消息：",
+                "step4-command": "/add [消息]",
+                "step4-example": "示例：",
+                "step4-example-command": "/add 你好，这是一条测试消息。"
+            },
+            ja: {
+                title: "Google フォーム Discord ボット ユーザーマニュアル",
+                "step1-title": "1. Discord ボットを追加する",
+                "step1-content": "まず、Discord サーバーにボットを追加する必要があります。ボットの招待リンクを使用して、希望のサーバーにボットを招待してください。",
+                "step2-title": "2. Google フォームの URL と入力フィールド ID を見つける",
+                "step2-content": "Google フォームの URL と入力フィールドの ID を見つける必要があります。方法は次の通りです：",
+                "step2-list": [
+                    "Google フォームにアクセスします。",
+                    "ブラウザの開発者ツールを開きます（通常は F12 キー）。",
+                    "ネットワークタブを選択します。",
+                    "調査を実行します。",
+                    "'formResponse' 項目を見つけます。",
+                    "ペイロードで 'entry.' の後ろにある数字を見つけます。これが入力フィールド ID です。"
+                ],
+                "step3-title": "3. ボットを設定する",
+                "step3-content": "Discord チャットで次のコマンドを使用してボットを設定します：",
+                "step3-command": "/setting [GoogleフォームURL] [入力フィールドID]",
+                "step3-example": "例：",
+                "step3-example-command": "/setting https://docs.google.com/forms/d/e/your-form-id/viewform 1234567",
+                "step4-title": "4. メッセージを送信する",
+                "step4-content": "設定が完了したら、次のコマンドを使用して Google フォームにメッセージを送信できます：",
+                "step4-command": "/add [メッセージ]",
+                "step4-example": "例：",
+                "step4-example-command": "/add こんにちは、これはテストメッセージです。"
+            }
+        };
+
+        function changeLanguage(lang) {
+            document.getElementById('title').textContent = translations[lang].title;
+
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`step${i}-title`).textContent = translations[lang][`step${i}-title`];
+                document.getElementById(`step${i}-content`).textContent = translations[lang][`step${i}-content`];
+
+                if (translations[lang][`step${i}-command`]) {
+                    document.getElementById(`step${i}-command`).textContent = translations[lang][`step${i}-command`];
+                }
+
+                if (translations[lang][`step${i}-example`]) {
+                    document.getElementById(`step${i}-example`).textContent = translations[lang][`step${i}-example`];
+                }
+
+                if (translations[lang][`step${i}-example-command`]) {
+                    document.getElementById(`step${i}-example-command`).textContent = translations[lang][`step${i}-example-command`];
+                }
+
+                if (translations[lang][`step${i}-list`]) {
+                    const listItems = translations[lang][`step${i}-list`];
+                    const stepList = document.getElementById(`step${i}-list`);
+                    stepList.innerHTML = ''; // Clear existing list items
+                    listItems.forEach(item => {
+                        const li = document.createElement('li');
+                        li.textContent = item;
+                        stepList.appendChild(li);
+                    });
+                }
+            }
+
+            // Reapply the animation each time the language is changed
+            gsap.fromTo(steps, {
+                opacity: 0,
+                y: 20
+            }, {
+                opacity: 1,
+                y: 0,
+                duration: 0.5,
+                stagger: 0.2,
+                ease: "power2.out"
+            });
+        }
+
+        // Initial animation when the page loads
+        animateSteps();
+    </script>
+</body>
+
+</html>

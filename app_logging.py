@@ -15,6 +15,8 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 @bot.tree.command(name="add", description="Add content to Google Forms")
 async def add(interaction: discord.Interaction, content: str):
     user_id = str(interaction.user.id)
+    
+    print("Slash command /add invoked")
 
     # Send a quick response
     await interaction.response.defer(thinking=True)
@@ -66,8 +68,8 @@ async def setting(interaction: discord.Interaction, content: str, entry: str):
 @bot.event
 async def on_ready():
     await bot.tree.sync()  # Sync slash commands to the server
-    
-    
+    print(f'Logged in as {bot.user} (ID: {bot.user.id})')
+    print('------')
 
 @bot.event
 async def on_message(message):
@@ -77,7 +79,7 @@ async def on_message(message):
     
     # Respond with "hello" if the user says "hi"
     if message.content.lower() == 'hi':
-        
+        print("User said hi")
         await message.channel.send('hello')
     
     # Call the command handler to process other commands

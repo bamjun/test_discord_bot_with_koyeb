@@ -1,0 +1,2 @@
+export DISCORD_BOT_TOKEN=some_discord_token
+export SCRIPT_URL=some_script_url
