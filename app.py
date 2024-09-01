@@ -1,7 +1,8 @@
 import os
+
 import discord
-from discord.ext import commands
 import requests
+from discord.ext import commands
 
 # URL of the deployed Google Apps Script web app
 script_url = script_url = os.getenv("SCRIPT_URL")
@@ -11,6 +12,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 
+
 # Define the /add command (Google Forms example)
 @bot.tree.command(name="add", description="Add content to Google Forms")
 async def add(interaction: discord.Interaction, content: str):
@@ -18,41 +20,38 @@ async def add(interaction: discord.Interaction, content: str):
 
     # Send a quick response
     await interaction.response.defer(thinking=True)
-    
+
     # Send a GET request to the Google Apps Script API to get the content URL and entry number
     params = {
-        'userId': user_id,
+        "userId": user_id,
     }
     script_response = requests.get(script_url, params=params)
     response_json = script_response.json()
-    
-    url = response_json['content']
-    
+
+    url = response_json["content"]
+
     # Set the entry number corresponding to each field in the Google Forms
     form_data = {
-        'entry.' + str(response_json['entry']) : content,  # Content entered by the user
+        "entry." + str(response_json["entry"]): content,  # Content entered by the user
     }
-    
+
     # Submit the form via a POST request
     response = requests.post(url, data=form_data)
-    
+
     # Send a message based on the result of the request
     if response.status_code == 200:
-        await interaction.followup.send(f'Content successfully submitted: {content}')
+        await interaction.followup.send(f"Content successfully submitted: {content}")
     else:
-        await interaction.followup.send(f'Submission failed: {response.status_code}')
+        await interaction.followup.send(f"Submission failed: {response.status_code}")
+
 
 # Define the /setting command (Save Google Forms URL)
 @bot.tree.command(name="setting", description="Save the URL of your Google Form")
 async def setting(interaction: discord.Interaction, content: str, entry: str):
     user_id = str(interaction.user.id)
-    
+
     # Send a POST request to the Google Apps Script API to save the URL
-    data = {
-        'userId': user_id,
-        'content': content,
-        'entry': entry
-    }
+    data = {"userId": user_id, "content": content, "entry": entry}
 
     await interaction.response.defer(thinking=True)
 
@@ -63,25 +62,26 @@ async def setting(interaction: discord.Interaction, content: str, entry: str):
     else:
         await interaction.followup.send(f"Failed to save URL: {response.status_code}")
 
+
 @bot.event
 async def on_ready():
     await bot.tree.sync()  # Sync slash commands to the server
-    
-    
+
 
 @bot.event
 async def on_message(message):
     # Ignore messages from the bot itself
     if message.author == bot.user:
         return
-    
+
     # Respond with "hello" if the user says "hi"
-    if message.content.lower() == 'hi':
-        
-        await message.channel.send('hello')
-    
+    if message.content.lower() == "hi":
+
+        await message.channel.send("hello")
+
     # Call the command handler to process other commands
     await bot.process_commands(message)
+
 
 @bot.event
 async def on_guild_join(guild):
@@ -91,5 +91,6 @@ async def on_guild_join(guild):
             await channel.send("Hello World")
             break
 
+
 # Run the bot
-bot.run(os.getenv('DISCORD_BOT_TOKEN'))
+bot.run(os.getenv("DISCORD_BOT_TOKEN"))
