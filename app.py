@@ -1,6 +1,7 @@
 import os
 import discord
 from discord.ext import commands
+import requests
 
 # 봇 인스턴스 생성
 intents = discord.Intents.default()
@@ -12,6 +13,25 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 async def on_ready():
     print(f'Logged in as {bot.user} (ID: {bot.user.id})')
     print('------')
+
+@bot.command(name='add')
+async def add(ctx, *, content: str):
+    # Google Forms의 제출 URL
+    url = 'https://docs.google.com/forms/d/e/1FAIpQLSfmTGJHQGjepy09H1jmc4svhJaYlaBdbbzU800dcjzOEScb-w/formResponse'
+    
+    # Google Forms의 각 필드에 해당하는 entry 번호를 설정
+    form_data = {
+        'entry.972880290': content,  # 사용자가 입력한 내용
+    }
+    
+    # POST 요청을 통해 폼 제출
+    response = requests.post(url, data=form_data)
+    
+    # 요청 결과에 따라 메시지를 보내기
+    if response.status_code == 200:
+        await ctx.send(f'내용이 성공적으로 제출되었습니다: {content}')
+    else:
+        await ctx.send(f'제출 실패: {response.status_code}')
 
 @bot.event
 async def on_message(message):
@@ -26,4 +46,5 @@ async def on_message(message):
     # 다른 명령어도 처리할 수 있도록 on_message에서 명령어 처리기를 호출
     await bot.process_commands(message)
 
+# 환경 변수에서 Discord Bot Token 가져오기
 bot.run(os.getenv('DISCORD_BOT_TOKEN'))
