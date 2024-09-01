@@ -1,9 +1,7 @@
-import discord
+import os
 from discord.ext import commands
 
-intents = discord.Intents.default()
-intents.message_content = True
-bot = commands.Bot(command_prefix="!", intents=intents)
+bot = commands.Bot(command_prefix="!")
 
 @bot.event
 async def on_ready():
@@ -13,4 +11,4 @@ async def on_ready():
 async def hello(ctx):
     await ctx.send("Hello, world!")
 
-bot.run('YOUR_DISCORD_BOT_TOKEN')
+bot.run(os.getenv('DISCORD_BOT_TOKEN'))
